@@ -4,14 +4,17 @@ import dev.byzus.byzuscells.cell.CellManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
+import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
 import net.kyori.adventure.text.Component;
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 @Route(name = "addplayer")
+@Permission("byzuscells.addplayer")
 public class AddPlayerCommand {
 
     /*
@@ -19,8 +22,14 @@ public class AddPlayerCommand {
      */
 
     @Execute(required = 2)
-    void execute(Player sender, @Arg @Name("uuid") UUID target, @Arg @Name("uuid") UUID cellNumber ) {
-        CellManager.addPlayer(cellNumber, target);
-        sender.sendMessage(Component.text(ChatColor.GREEN + "Pomyślnie dodano gracza do celi."));
+    void execute(CommandSender sender, @Arg @Name("target") String target, @Arg @Name("id") int cellId) {
+        Player player = Bukkit.getPlayer(target);
+        if (player == null) {
+            sender.sendMessage(Component.text("Nie znaleziono gracza o nicku " + target));
+            return;
+        }
+        UUID uuid = player.getUniqueId();
+        CellManager.addPlayer(cellId, sender, uuid);
+        sender.sendMessage(Component.text("Pomyślnie dodano gracza do celi."));
     }
 }
