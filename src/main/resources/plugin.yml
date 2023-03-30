@@ -1,5 +1,0 @@
-name: ByzusCells
-version: '${version}'
-main: dev.byzus.byzuscells.ByzusCells
-api-version: 1.19
-load: STARTUP
