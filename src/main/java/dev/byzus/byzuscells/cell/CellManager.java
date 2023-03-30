@@ -43,7 +43,7 @@ public class CellManager {
             return;
         }
         CellManager.getCells().remove(cell);
-        sender.sendMessage(Component.text("Usunieto celę o numerze " + id));
+        sender.sendMessage(Component.text("Usunięto celę o numerze " + id));
     }
 
     public static void addPlayer(int cellId, CommandSender sender, UUID target) {
