@@ -51,6 +51,7 @@ public class CellManager {
         Cell cell = findCell(cellId);
         if (cell == null) {
             sender.sendMessage("Taka cela nie istnieje!");
+            return;
         }
 
         CellManager.getCells().putIfAbsent(cell, target);
