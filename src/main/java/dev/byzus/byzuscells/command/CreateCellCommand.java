@@ -31,6 +31,6 @@ public class CreateCellCommand {
         double y = loc.getY();
         double z = loc.getZ();
         CellManager.createCell(cellId, x, y, z, sender.getWorld());
-        sender.sendMessage(Component.text("Pomyslnie utworzono celę o numerze " + cellId));
+        sender.sendMessage(Component.text("Pomyślnie utworzono celę o numerze " + cellId));
     }
 }
