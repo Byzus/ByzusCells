@@ -21,7 +21,7 @@ public class CreateCellCommand {
     @Execute(required = 4)
     void execute(Player sender, @Arg double x, @Arg double y, @Arg double z, @Arg int cellId) {
         CellManager.createCell(cellId, x, y, z, sender.getWorld());
-        sender.sendMessage(Component.text(">Pomyslnie utworzono celę o numerze " + cellId));
+        sender.sendMessage(Component.text("Pomyślnie utworzono celę o numerze " + cellId));
     }
 
     @Execute(required = 1)
