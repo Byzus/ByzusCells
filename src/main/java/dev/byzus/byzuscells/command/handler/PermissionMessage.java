@@ -18,6 +18,6 @@ public class PermissionMessage implements PermissionHandler<CommandSender> {
 
         Formatter formatter = new Formatter()
             .register("{PERMISSION}", value);
-        commandSender.sendMessage(formatter.format(ChatColor.RED + "You don't have permission to use this command. Required permission: &7{PERMISSION}"));
+        commandSender.sendMessage(formatter.format(ChatColor.RED + "Nie masz permisji, aby użyć tej komendy: &7{PERMISSION}"));
     }
 }
