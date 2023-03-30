@@ -39,6 +39,7 @@ public class CellManager {
     public static void deleteCell(CommandSender sender, int id) {
         Cell cell = findCell(id);
         if (cell == null) {
+            sender.sendMessage("This cell doesn't exist!");
             return;
         }
         CellManager.getCells().remove(cell);
