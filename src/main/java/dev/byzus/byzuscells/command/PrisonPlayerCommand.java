@@ -25,13 +25,16 @@ public class PrisonPlayerCommand {
     void execute(CommandSender sender, @Arg @Name("target") String target, @Arg @Name("id") int cellId) {
         Player player = Bukkit.getPlayer(target);
         if (player == null) {
-            sender.sendMessage(LanguageManager.CannotFindPlayer + target);
+            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER.replaceText(consumer -> {
+                consumer.match("{target}").replacement(target).build();
+            }));
             return;
         }
         playerPreviousLocation = player.getLocation();
         UUID uuid = player.getUniqueId();
         CellManager.addPlayer(cellId, sender, uuid);
         player.setGameMode(GameMode.ADVENTURE);
-        sender.sendMessage(LanguageManager.PlayerAddedToCell);
+        sender.sendMessage(LanguageManager.PLAYER_ADDED_TO_CELL);
     }
+
 }

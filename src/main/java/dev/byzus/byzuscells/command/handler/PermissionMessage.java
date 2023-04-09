@@ -19,4 +19,5 @@ public class PermissionMessage implements PermissionHandler<CommandSender> {
             .register("{PERMISSION}", value);
         commandSender.sendMessage(formatter.format("You don't have permission to use this command: &7{PERMISSION}"));
     }
+
 }

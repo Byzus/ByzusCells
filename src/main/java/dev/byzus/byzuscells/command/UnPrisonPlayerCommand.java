@@ -22,13 +22,14 @@ public class UnPrisonPlayerCommand {
     void execute(CommandSender sender, @Arg @Name("target") String target) {
         Player player = Bukkit.getPlayer(target);
         if (player == null) {
-            sender.sendMessage(LanguageManager.CannotFindPlayer);
+            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER);
             return;
         }
         UUID uuid = player.getUniqueId();
         player.teleport(PrisonPlayerCommand.playerPreviousLocation);
         CellManager.removePlayer(sender, uuid);
         player.setGameMode(GameMode.SURVIVAL);
-        sender.sendMessage(LanguageManager.PlayerAddedToCell);
+        sender.sendMessage(LanguageManager.PLAYER_ADDED_TO_CELL);
     }
+
 }

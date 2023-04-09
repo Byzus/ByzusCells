@@ -7,7 +7,6 @@ import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 @Route(name = "createcell")
@@ -17,7 +16,9 @@ public class CreateCellCommand {
     @Execute(required = 4)
     void execute(Player sender, @Arg double x, @Arg double y, @Arg double z, @Arg int cellId) {
         CellManager.createCell(cellId, x, y, z, sender.getWorld());
-        sender.sendMessage(Component.text(" " + cellId));
+        sender.sendMessage(LanguageManager.CREATED_CELL.replaceText(consumer -> {
+            consumer.match("{cellId}").replacement(String.valueOf(cellId)).build();
+        }));
     }
 
     @Execute(required = 1)
@@ -27,6 +28,10 @@ public class CreateCellCommand {
         double y = loc.getY();
         double z = loc.getZ();
         CellManager.createCell(cellId, x, y, z, sender.getWorld());
-        sender.sendMessage(LanguageManager.CreatedCell);
+        sender.sendMessage(LanguageManager.CREATED_CELL.replaceText(consumer -> {
+            consumer.match("{cellId}").replacement(String.valueOf(cellId)).build();
+        }));
+
     }
+
 }

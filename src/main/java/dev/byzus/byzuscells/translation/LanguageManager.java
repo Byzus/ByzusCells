@@ -2,65 +2,66 @@ package dev.byzus.byzuscells.translation;
 
 import dev.byzus.byzuscells.ByzusCells;
 import net.kyori.adventure.text.Component;
+import org.apache.commons.lang3.StringUtils;
 
 public class LanguageManager {
 
     static PLTranslation plTranslation = new PLTranslation();
     static ENTranslation enTranslation = new ENTranslation();
 
-    public static Component CellAlreadyExists;
-    public static Component CellDoesntExists;
-    public static Component CellDeleted;
-    public static Component PlayerAddedToCell;
-    public static Component CreatedCell;
-    public static Component PlayerRemovedFromCell;
-    public static Component CannotFindPlayer;
-    public static Component JailedPlayer;
-    public static Component PlayerHasBeenUnJailed;
-    public static Component YouHaveBeenUnjailed;
-    public static Component YouHaveBeenJailed;
-    public static Component YouMustBeAPlayer;
+    public static Component CELL_ALREADY_EXISTS;
+    public static Component CELL_DOESNT_EXIST;
+    public static Component CELL_DELETED;
+    public static Component PLAYER_ADDED_TO_CELL;
+    public static Component CREATED_CELL;
+    public static Component PLAYER_REMOVED_FROM_CELL;
+    public static Component CANNOT_FIND_PLAYER;
+    public static Component JAILED_PLAYER;
+    public static Component PLAYER_HAS_BEEN_UNJAILED;
+    public static Component YOU_HAVE_BEEN_UNJAILED;
+    public static Component YOU_HAVE_BEEN_JAILED;
 
     public static void setEnglishLanguage() {
-        CellAlreadyExists = enTranslation.EN_CellAlreadyExists;
-        CellDoesntExists = enTranslation.EN_CellDoesntExists;
-        CellDeleted = enTranslation.EN_CellDeleted;
-        PlayerAddedToCell = enTranslation.EN_PlayerAddedToCell;
-        CreatedCell = enTranslation.EN_CreatedCell;
-        PlayerRemovedFromCell = enTranslation.EN_PlayerRemovedFromCell;
-        CannotFindPlayer = enTranslation.EN_CannotFindPlayer;
-        JailedPlayer = enTranslation.EN_JailedPlayer;
-        PlayerHasBeenUnJailed = enTranslation.EN_PlayerHasBeenUnJailed;
-        YouHaveBeenUnjailed = enTranslation.EN_YouHaveBeenUnjailed;
-        YouHaveBeenJailed = enTranslation.EN_YouHaveBeenJailed;
+        CELL_ALREADY_EXISTS = enTranslation.EN_CELL_ALREADY_EXISTS;
+        CELL_DOESNT_EXIST = enTranslation.EN_CELL_DOESNT_EXIST;
+        CELL_DELETED = enTranslation.EN_CELL_DELETED;
+        PLAYER_ADDED_TO_CELL = enTranslation.EN_PLAYER_ADDED_TO_CELL;
+        CREATED_CELL = enTranslation.EN_CREATED_CELL;
+        PLAYER_REMOVED_FROM_CELL = enTranslation.EN_PLAYER_REMOVED_FROM_CELL;
+        CANNOT_FIND_PLAYER = enTranslation.EN_CANNOT_FIND_PLAYER;
+        JAILED_PLAYER = enTranslation.EN_JAILED_PLAYER;
+        PLAYER_HAS_BEEN_UNJAILED = enTranslation.EN_PLAYER_HAS_BEEN_UNJAILED;
+        YOU_HAVE_BEEN_UNJAILED = enTranslation.EN_YOU_HAVE_BEEN_UNJAILED;
+        YOU_HAVE_BEEN_JAILED = enTranslation.EN_YOU_HAVE_BEEN_JAILED;
     }
 
     public static void setPolishLanguage() {
-        CellAlreadyExists = plTranslation.PL_CellAlreadyExists;
-        CellDoesntExists = plTranslation.PL_CellDoesntExists;
-        CellDeleted = plTranslation.PL_CellDeleted;
-        PlayerAddedToCell = plTranslation.PL_PlayerAddedToCell;
-        CreatedCell = plTranslation.PL_CreatedCell;
-        PlayerRemovedFromCell = plTranslation.PL_PlayerRemovedFromCell;
-        CannotFindPlayer = plTranslation.PL_CannotFindPlayer;
-        JailedPlayer = plTranslation.PL_JailedPlayer;
-        PlayerHasBeenUnJailed = plTranslation.PL_PlayerHasBeenUnJailed;
-        YouHaveBeenUnjailed = plTranslation.PL_YouHaveBeenUnjailed;
-        YouHaveBeenJailed = plTranslation.PL_YouHaveBeenJailed;
+        CELL_ALREADY_EXISTS = plTranslation.PL_CELL_ALREADY_EXISTS;
+        CELL_DOESNT_EXIST = plTranslation.PL_CELL_DOESNT_EXIST;
+        CELL_DELETED = plTranslation.PL_CELL_DELETED;
+        PLAYER_ADDED_TO_CELL = plTranslation.PL_PLAYER_ADDED_TO_CELL;
+        CREATED_CELL = plTranslation.PL_CREATED_CELL;
+        PLAYER_REMOVED_FROM_CELL = plTranslation.PL_PLAYER_REMOVED_FROM_CELL;
+        CANNOT_FIND_PLAYER = plTranslation.PL_CANNOT_FIND_PLAYER;
+        JAILED_PLAYER = plTranslation.PL_JAILED_PLAYER;
+        PLAYER_HAS_BEEN_UNJAILED = plTranslation.PL_PLAYER_HAS_BEEN_UNJAILED;
+        YOU_HAVE_BEEN_UNJAILED = plTranslation.PL_YOU_HAVE_BEEN_UNJAILED;
+        YOU_HAVE_BEEN_JAILED = plTranslation.PL_YOU_HAVE_BEEN_JAILED;
     }
 
     public static void checkLanguage() {
 
         String language = ByzusCells.getInstance().getConfig().getString("language");
 
-        if (language.equals("en_en")) {
+        if (StringUtils.containsIgnoreCase(language, "en_en")) {
             setEnglishLanguage();
-        } else if (language.equals("pl_pl")) {
+        } else if (StringUtils.containsIgnoreCase(language, "pl_pl")) {
             setPolishLanguage();
         } else {
-            setPolishLanguage();
+            setEnglishLanguage();
+
         }
-        // TODO: Check LanguageCheck and finish translation.
+
     }
 
 }

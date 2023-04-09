@@ -17,4 +17,5 @@ public class UnJailPlayerCommand {
     void execute(CommandSender sender, @Arg @Name("target") Player target) {
         PlayerJailController.unJail(sender, target);
     }
+
 }

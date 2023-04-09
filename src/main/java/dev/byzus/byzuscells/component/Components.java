@@ -20,4 +20,5 @@ public class Components {
     public static Component info(String text) {
         return Component.text(text).color(TextColor.color(0, 200, 200));
     }
+
 }

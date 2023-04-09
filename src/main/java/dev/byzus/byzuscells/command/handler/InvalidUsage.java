@@ -26,6 +26,7 @@ public class InvalidUsage implements InvalidUsageHandler<CommandSender> {
 
             sender.sendMessage(formatter.format("&7› &3{USAGE}"));
         }
+
     }
 
 }

@@ -39,18 +39,18 @@ public class CellManager {
     public static void deleteCell(CommandSender sender, int id) {
         Cell cell = findCell(id);
         if (cell == null) {
-            sender.sendMessage(LanguageManager.CellDoesntExists);
+            sender.sendMessage(LanguageManager.CELL_DOESNT_EXIST);
             return;
         }
         CellManager.getCells().remove(cell);
-        sender.sendMessage(LanguageManager.CellDeleted);
+        sender.sendMessage(LanguageManager.CELL_DELETED);
     }
 
     public static void addPlayer(int cellId, CommandSender sender, UUID target) {
         Player player = Bukkit.getPlayer(target);
         Cell cell = findCell(cellId);
         if (cell == null) {
-            sender.sendMessage(LanguageManager.CellDoesntExists);
+            sender.sendMessage(LanguageManager.CELL_DOESNT_EXIST);
             return;
         }
 
@@ -65,4 +65,5 @@ public class CellManager {
     public static Map<Cell, UUID> getCells() {
         return cells;
     }
+
 }

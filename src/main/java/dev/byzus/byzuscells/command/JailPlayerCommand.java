@@ -15,6 +15,7 @@ public class JailPlayerCommand {
 
     @Execute(required = 2)
     void execute(CommandSender sender, @Arg @Name("target") String target, @Arg @Name("radius") int borderSize) {
-        PlayerJailController.jail(sender, Bukkit.getPlayer(target), borderSize);
+        PlayerJailController.jail(sender, Bukkit.getServer().getPlayer(target), borderSize);
     }
+
 }
