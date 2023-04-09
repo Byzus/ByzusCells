@@ -21,4 +21,5 @@ public class CellAlreadyExistsException extends RuntimeException {
     protected CellAlreadyExistsException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
+
 }

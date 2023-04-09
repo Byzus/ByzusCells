@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "dev.byzus"
-version = "1.0.0-SNAPSHOT"
+version = "1.2.0-SNAPSHOT"
 description = "ByzusCells"
 
 repositories {

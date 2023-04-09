@@ -3,7 +3,6 @@ package dev.byzus.byzuscells.command.handler;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.command.permission.RequiredPermissions;
 import dev.rollczi.litecommands.handle.PermissionHandler;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import panda.utilities.text.Formatter;
 import panda.utilities.text.Joiner;
@@ -18,6 +17,7 @@ public class PermissionMessage implements PermissionHandler<CommandSender> {
 
         Formatter formatter = new Formatter()
             .register("{PERMISSION}", value);
-        commandSender.sendMessage(formatter.format(ChatColor.RED + "Nie masz permisji, aby użyć tej komendy: &7{PERMISSION}"));
+        commandSender.sendMessage(formatter.format("You don't have permission to use this command: &7{PERMISSION}"));
     }
+
 }
