@@ -1,7 +1,7 @@
 package dev.byzus.byzuscells.cell;
 
 import dev.byzus.byzuscells.exception.CellAlreadyExistsException;
-import net.kyori.adventure.text.Component;
+import dev.byzus.byzuscells.translation.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -29,7 +29,7 @@ public class CellManager {
     public static Result<Cell, ?> createCell(int id, double x, double y, double z, World world) {
         for (Cell cell : CellManager.getCells().keySet()) {
             if (cell.getId() == id) {
-                return Result.error(new CellAlreadyExistsException("Cela o tym samym numerze już istnieje!"));
+                return Result.error(new CellAlreadyExistsException("Cell of the same number already exists!"));
             }
         }
         CellManager.getCells().put(new Cell(new Location(world, x, y, z), id), null);
@@ -39,18 +39,18 @@ public class CellManager {
     public static void deleteCell(CommandSender sender, int id) {
         Cell cell = findCell(id);
         if (cell == null) {
-            sender.sendMessage("This cell doesn't exist!");
+            sender.sendMessage(LanguageManager.CellDoesntExists);
             return;
         }
         CellManager.getCells().remove(cell);
-        sender.sendMessage(Component.text("Usunięto celę o numerze " + id));
+        sender.sendMessage(LanguageManager.CellDeleted);
     }
 
     public static void addPlayer(int cellId, CommandSender sender, UUID target) {
         Player player = Bukkit.getPlayer(target);
         Cell cell = findCell(cellId);
         if (cell == null) {
-            sender.sendMessage("Taka cela nie istnieje!");
+            sender.sendMessage(LanguageManager.CellDoesntExists);
             return;
         }
 
