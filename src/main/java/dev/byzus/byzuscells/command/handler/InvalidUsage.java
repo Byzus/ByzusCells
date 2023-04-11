@@ -1,9 +1,9 @@
 package dev.byzus.byzuscells.command.handler;
 
+import dev.byzus.byzuscells.component.Components;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.handle.InvalidUsageHandler;
 import dev.rollczi.litecommands.schematic.Schematic;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import panda.utilities.text.Formatter;
 
@@ -16,7 +16,7 @@ public class InvalidUsage implements InvalidUsageHandler<CommandSender> {
         List<String> schematics = schematic.getSchematics();
 
         if (schematic.isOnlyFirst()) {
-            sender.sendMessage(ChatColor.RED + "Invalid usage: " + schematics.get(0));
+            sender.sendMessage(Components.error("Invalid usage: " + schematics.get(0)));
             return;
         }
 
