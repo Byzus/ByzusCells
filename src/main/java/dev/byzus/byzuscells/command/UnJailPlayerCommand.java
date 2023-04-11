@@ -1,6 +1,6 @@
 package dev.byzus.byzuscells.command;
 
-import dev.byzus.byzuscells.controller.PlayerJailController;
+import dev.byzus.byzuscells.manager.PlayerJailManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
@@ -15,7 +15,7 @@ public class UnJailPlayerCommand {
 
     @Execute(required = 1)
     void execute(CommandSender sender, @Arg @Name("target") Player target) {
-        PlayerJailController.unJail(sender, target);
+        PlayerJailManager.unJail(sender, target);
     }
 
 }
