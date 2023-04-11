@@ -18,8 +18,12 @@ public class LanguageManager {
     public static Component CANNOT_FIND_PLAYER;
     public static Component JAILED_PLAYER;
     public static Component PLAYER_HAS_BEEN_UNJAILED;
+
     public static Component YOU_HAVE_BEEN_UNJAILED;
+    public static Component YOU_HAVE_BEEN_UNJAILED_BY;
+
     public static Component YOU_HAVE_BEEN_JAILED;
+    public static Component YOU_HAVE_BEEN_JAILED_BY;
 
     public static void setEnglishLanguage() {
         CELL_ALREADY_EXISTS = enTranslation.EN_CELL_ALREADY_EXISTS;
@@ -33,6 +37,9 @@ public class LanguageManager {
         PLAYER_HAS_BEEN_UNJAILED = enTranslation.EN_PLAYER_HAS_BEEN_UNJAILED;
         YOU_HAVE_BEEN_UNJAILED = enTranslation.EN_YOU_HAVE_BEEN_UNJAILED;
         YOU_HAVE_BEEN_JAILED = enTranslation.EN_YOU_HAVE_BEEN_JAILED;
+
+        YOU_HAVE_BEEN_UNJAILED_BY = enTranslation.EN_YOU_HAVE_BEEN_UNJAILED_BY;
+        YOU_HAVE_BEEN_JAILED_BY = enTranslation.EN_YOU_HAVE_BEEN_JAILED_BY;
     }
 
     public static void setPolishLanguage() {
@@ -47,6 +54,9 @@ public class LanguageManager {
         PLAYER_HAS_BEEN_UNJAILED = plTranslation.PL_PLAYER_HAS_BEEN_UNJAILED;
         YOU_HAVE_BEEN_UNJAILED = plTranslation.PL_YOU_HAVE_BEEN_UNJAILED;
         YOU_HAVE_BEEN_JAILED = plTranslation.PL_YOU_HAVE_BEEN_JAILED;
+
+        YOU_HAVE_BEEN_UNJAILED_BY = plTranslation.PL_YOU_HAVE_BEEN_UNJAILED_BY;
+        YOU_HAVE_BEEN_JAILED_BY = plTranslation.PL_YOU_HAVE_BEEN_JAILED_BY;
     }
 
     public static void checkLanguage() {

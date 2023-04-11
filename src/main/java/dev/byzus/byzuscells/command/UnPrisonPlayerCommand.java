@@ -1,6 +1,6 @@
 package dev.byzus.byzuscells.command;
 
-import dev.byzus.byzuscells.cell.CellManager;
+import dev.byzus.byzuscells.manager.CellManager;
 import dev.byzus.byzuscells.translation.LanguageManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
@@ -22,14 +22,19 @@ public class UnPrisonPlayerCommand {
     void execute(CommandSender sender, @Arg @Name("target") String target) {
         Player player = Bukkit.getPlayer(target);
         if (player == null) {
-            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER);
+            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER + target);
             return;
         }
         UUID uuid = player.getUniqueId();
         player.teleport(PrisonPlayerCommand.playerPreviousLocation);
         CellManager.removePlayer(sender, uuid);
-        player.setGameMode(GameMode.SURVIVAL);
-        sender.sendMessage(LanguageManager.PLAYER_ADDED_TO_CELL);
+
+        if (player.getPreviousGameMode() == null) {
+            player.setGameMode(GameMode.SURVIVAL);
+        } else if (!(player.getPreviousGameMode() == null)) {
+            player.setGameMode(player.getPreviousGameMode());
+        }
+        sender.sendMessage(LanguageManager.PLAYER_REMOVED_FROM_CELL);
     }
 
 }

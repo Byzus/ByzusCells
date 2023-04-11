@@ -1,6 +1,6 @@
 package dev.byzus.byzuscells.command;
 
-import dev.byzus.byzuscells.cell.CellManager;
+import dev.byzus.byzuscells.manager.CellManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;

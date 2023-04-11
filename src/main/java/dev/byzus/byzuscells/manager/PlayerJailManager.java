@@ -1,6 +1,7 @@
 package dev.byzus.byzuscells.manager;
 
 import dev.byzus.byzuscells.translation.LanguageManager;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,25 +23,32 @@ public class PlayerJailManager {
     private static final Sound JAIL_SOUND = Sound.BLOCK_ANVIL_LAND;
     private static final Sound UNJAIL_SOUND = Sound.ENTITY_CAT_AMBIENT;
 
-    public static void jail(CommandSender sender, Player target, int borderSize) {
-        Location loc = target.getLocation();
+    public static void jail(CommandSender sender, String target, int borderSize) {
+        Player player = Bukkit.getPlayer(target); // target
+        Location loc = player.getLocation();
         sender.sendMessage(LanguageManager.JAILED_PLAYER);
-        target.sendMessage(LanguageManager.YOU_HAVE_BEEN_JAILED);
-        target.setGameMode(GameMode.ADVENTURE);
-        target.playSound(target, JAIL_SOUND, 0.25F, 0.5F);
+
+        if (sender instanceof Player) {
+            player.sendMessage(LanguageManager.YOU_HAVE_BEEN_JAILED_BY + target);
+        } else if (!(sender instanceof Player)) {
+            player.sendMessage(LanguageManager.YOU_HAVE_BEEN_JAILED);
+        }
+
+        player.setGameMode(GameMode.ADVENTURE);
+        player.playSound(player, JAIL_SOUND, 0.25F, 1.0F);
 
         for (int x = -borderSize; x <= borderSize; x++) {
             for (int y = -borderSize; y <= borderSize; y++) {
                 for (int z = -borderSize; z <= borderSize; z++) {
                     Location blockLoc = loc.toBlockLocation().clone().add(x, y, z);
-                    jails.put(Triple.of(blockLoc, blockLoc.getBlock().getBlockData(), blockLoc.getBlock().getState()), target.getUniqueId()); // save old block
+                    jails.put(Triple.of(blockLoc, blockLoc.getBlock().getBlockData(), blockLoc.getBlock().getState()), player.getUniqueId());
                     blockLoc.getBlock().setType(MATERIAL);
                     if (borderSize == 1) {
-                        jails.put(Triple.of(target.getEyeLocation().toBlockLocation().add(0, 1, 0), target.getEyeLocation().toBlockLocation().getBlock().getBlockData(), target.getEyeLocation().toBlockLocation().getBlock().getState()), target.getUniqueId());
-                        target.getEyeLocation().toBlockLocation().add(0, 1, 0).getBlock().setType(MATERIAL);
+                        jails.put(Triple.of(player.getEyeLocation().toBlockLocation().add(0, 1, 0), player.getEyeLocation().toBlockLocation().getBlock().getBlockData(), player.getEyeLocation().toBlockLocation().getBlock().getState()), player.getUniqueId());
+                        player.getEyeLocation().toBlockLocation().add(0, 1, 0).getBlock().setType(MATERIAL);
                     }
-                    target.getLocation().toBlockLocation().getBlock().setType(Material.AIR);
-                    target.getEyeLocation().toBlockLocation().getBlock().setType(Material.AIR);
+                    player.getLocation().toBlockLocation().getBlock().setType(Material.AIR);
+                    player.getEyeLocation().toBlockLocation().getBlock().setType(Material.AIR);
                 }
             }
         }
@@ -53,9 +61,9 @@ public class PlayerJailManager {
 
         if (target.getPreviousGameMode() == null) {
             target.setGameMode(GameMode.SURVIVAL);
+        } else if (!(target.getPreviousGameMode() == null)) {
+            target.setGameMode(target.getPreviousGameMode());
         }
-        target.setGameMode(target.getPreviousGameMode());
-
         for (Map.Entry<Triple<Location, BlockData, BlockState>, UUID> entry : jails.entrySet()) {
             if (entry.getValue().equals(target.getUniqueId())) {
                 entry.getKey().getFirst().getBlock().setBlockData(entry.getKey().getSecond());

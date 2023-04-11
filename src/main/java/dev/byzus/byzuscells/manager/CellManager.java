@@ -1,5 +1,6 @@
-package dev.byzus.byzuscells.cell;
+package dev.byzus.byzuscells.manager;
 
+import dev.byzus.byzuscells.cell.Cell;
 import dev.byzus.byzuscells.exception.CellAlreadyExistsException;
 import dev.byzus.byzuscells.translation.LanguageManager;
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ public class CellManager {
             return;
         }
         CellManager.getCells().remove(cell);
-        sender.sendMessage(LanguageManager.CELL_DELETED);
+        sender.sendMessage(LanguageManager.CELL_DELETED + String.valueOf(id));
     }
 
     public static void addPlayer(int cellId, CommandSender sender, UUID target) {

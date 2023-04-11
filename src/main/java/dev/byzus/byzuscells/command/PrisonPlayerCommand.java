@@ -1,6 +1,6 @@
 package dev.byzus.byzuscells.command;
 
-import dev.byzus.byzuscells.cell.CellManager;
+import dev.byzus.byzuscells.manager.CellManager;
 import dev.byzus.byzuscells.translation.LanguageManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
@@ -25,9 +25,7 @@ public class PrisonPlayerCommand {
     void execute(CommandSender sender, @Arg @Name("target") String target, @Arg @Name("id") int cellId) {
         Player player = Bukkit.getPlayer(target);
         if (player == null) {
-            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER.replaceText(consumer -> {
-                consumer.match("{target}").replacement(target).build();
-            }));
+            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER + target);
             return;
         }
         playerPreviousLocation = player.getLocation();
