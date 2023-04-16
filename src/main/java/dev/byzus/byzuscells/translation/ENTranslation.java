@@ -12,7 +12,7 @@ public class ENTranslation {
     public Component EN_CREATED_CELL = Components.success("Successfully created cell of number: ");
     public Component EN_PLAYER_REMOVED_FROM_CELL = Components.success("Successfully removed player from cell.");
     public Component EN_CANNOT_FIND_PLAYER = Components.error("Cannot find player with name: ");
-    public Component EN_JAILED_PLAYER = Components.success("Player has been added to jail.");
+    public Component EN_JAILED_PLAYER = Components.success("Player has been jailed.");
     public Component EN_PLAYER_HAS_BEEN_UNJAILED = Components.success("Player has been successfully unjailed.");
 
     public Component EN_YOU_HAVE_BEEN_UNJAILED = Components.success("You have been unjailed");

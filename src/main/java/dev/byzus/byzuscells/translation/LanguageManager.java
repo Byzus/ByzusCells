@@ -25,6 +25,7 @@ public class LanguageManager {
     public static Component YOU_HAVE_BEEN_JAILED;
     public static Component YOU_HAVE_BEEN_JAILED_BY;
 
+
     public static void setEnglishLanguage() {
         CELL_ALREADY_EXISTS = enTranslation.EN_CELL_ALREADY_EXISTS;
         CELL_DOESNT_EXIST = enTranslation.EN_CELL_DOESNT_EXIST;
@@ -41,6 +42,7 @@ public class LanguageManager {
         YOU_HAVE_BEEN_UNJAILED_BY = enTranslation.EN_YOU_HAVE_BEEN_UNJAILED_BY;
         YOU_HAVE_BEEN_JAILED_BY = enTranslation.EN_YOU_HAVE_BEEN_JAILED_BY;
     }
+
 
     public static void setPolishLanguage() {
         CELL_ALREADY_EXISTS = plTranslation.PL_CELL_ALREADY_EXISTS;

@@ -7,6 +7,7 @@ import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -25,7 +26,7 @@ public class PrisonPlayerCommand {
     void execute(CommandSender sender, @Arg @Name("target") String target, @Arg @Name("id") int cellId) {
         Player player = Bukkit.getPlayer(target);
         if (player == null) {
-            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER + target);
+            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER.append(Component.text(target)));
             return;
         }
         playerPreviousLocation = player.getLocation();
