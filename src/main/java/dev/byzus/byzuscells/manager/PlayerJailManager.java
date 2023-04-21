@@ -62,9 +62,13 @@ public class PlayerJailManager {
             sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
             return;
         }
-        sender.sendMessage(Components.success("Player has been successfully unjailed."));
-        if (sender instanceof Player sender_player) {
-            target.sendMessage(Components.success("You have been unjailed by: ").append(Component.text(sender_player.getName())));
+        boolean exists = jails.containsValue(target.getUniqueId());
+        if (!exists) {
+            sender.sendMessage(Components.error("Player is not jailed!"));
+            return;
+        }
+        if (sender instanceof Player) {
+            target.sendMessage(Components.success("You have been unjailed by: ").append(Component.text(sender.getName())));
         } else {
             Components.success("You have been unjailed");
         }
@@ -82,5 +86,6 @@ public class PlayerJailManager {
             }
         }
         jails.clear();
+        sender.sendMessage(Components.success("Player has been successfully unjailed."));
     }
 }
