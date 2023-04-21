@@ -1,10 +1,11 @@
 package dev.byzus.byzuscells.command.argument;
 
-import dev.byzus.byzuscells.translation.LanguageManager;
+import dev.byzus.byzuscells.component.Components;
 import dev.rollczi.litecommands.argument.ArgumentName;
 import dev.rollczi.litecommands.argument.simple.OneArgument;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.suggestion.Suggestion;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -22,11 +23,11 @@ public class PlayerArgument implements OneArgument<Player>  {
     }
 
     @Override
-    public Result<Player, ?> parse(LiteInvocation invocation, String argument) {
+    public Result<Player, Component> parse(LiteInvocation invocation, String argument) {
         Player player = this.server.getPlayer(argument);
 
         if (player == null) {
-            return Result.error(LanguageManager.CANNOT_FIND_PLAYER);
+            return Result.error(Components.error("Cannot find player with name: ").append(Component.text(player.getName())));
         }
 
         return Result.ok(player);

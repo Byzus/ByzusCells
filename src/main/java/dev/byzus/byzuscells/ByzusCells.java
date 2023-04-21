@@ -10,7 +10,6 @@ import dev.byzus.byzuscells.command.UnPrisonPlayerCommand;
 import dev.byzus.byzuscells.command.argument.PlayerArgument;
 import dev.byzus.byzuscells.command.handler.InvalidUsage;
 import dev.byzus.byzuscells.command.handler.PermissionMessage;
-import dev.byzus.byzuscells.translation.LanguageManager;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -47,7 +46,6 @@ public final class ByzusCells extends JavaPlugin {
             .permissionHandler(new PermissionMessage())
             .register();
 
-        LanguageManager.checkLanguage();
         long millis = started.elapsed(TimeUnit.MILLISECONDS);
         this.getLogger().info("Successfully enabled ByzusCells in " + millis + "ms");
     }

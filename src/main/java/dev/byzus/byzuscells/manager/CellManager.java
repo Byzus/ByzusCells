@@ -1,8 +1,8 @@
 package dev.byzus.byzuscells.manager;
 
 import dev.byzus.byzuscells.cell.Cell;
+import dev.byzus.byzuscells.component.Components;
 import dev.byzus.byzuscells.exception.CellAlreadyExistsException;
-import dev.byzus.byzuscells.translation.LanguageManager;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,7 +28,7 @@ public class CellManager {
         return null;
     }
 
-    public static Result<Cell, ?> createCell(int id, double x, double y, double z, World world) {
+    public static Result<Cell, Exception> createCell(int id, double x, double y, double z, World world) {
         for (Cell cell : CellManager.getCells().keySet()) {
             if (cell.getId() == id) {
                 return Result.error(new CellAlreadyExistsException("Cell of the same number already exists!"));
@@ -41,23 +41,31 @@ public class CellManager {
     public static void deleteCell(CommandSender sender, int id) {
         Cell cell = findCell(id);
         if (cell == null) {
-            sender.sendMessage(LanguageManager.CELL_DOESNT_EXIST);
+            sender.sendMessage(Components.error("This cell doesn't exist!"));
             return;
         }
         CellManager.getCells().remove(cell);
-        sender.sendMessage(LanguageManager.CELL_DELETED.append(Component.text(id)));
+        sender.sendMessage(Components.success("Successfully deleted cell of number: ").append(Component.text(id)));
     }
 
     public static void addPlayer(int cellId, CommandSender sender, UUID target) {
         Player player = Bukkit.getPlayer(target);
         Cell cell = findCell(cellId);
         if (cell == null) {
-            sender.sendMessage(LanguageManager.CELL_DOESNT_EXIST);
+            sender.sendMessage(Components.error("This cell doesn't exist!"));
             return;
+        }
+
+        if (player == null) {
+            sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(player.getName())));
         }
 
         CellManager.getCells().putIfAbsent(cell, target);
         player.teleport(cell.getLocation());
+    }
+
+    public static void addPlayer(int cellId, CommandSender sender, Player target) {
+        addPlayer(cellId, sender, target.getUniqueId());
     }
 
     public static void removePlayer(CommandSender sender, UUID target) {
