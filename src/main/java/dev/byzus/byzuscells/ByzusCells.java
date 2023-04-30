@@ -11,6 +11,8 @@ import dev.byzus.byzuscells.command.argument.PlayerArgument;
 import dev.byzus.byzuscells.command.handler.InvalidUsage;
 import dev.byzus.byzuscells.command.handler.PermissionMessage;
 import dev.byzus.byzuscells.manager.CellManager;
+import dev.byzus.byzuscells.manager.GUIManager;
+import dev.byzus.byzuscells.manager.PlayerJailManager;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -35,16 +37,18 @@ public final class ByzusCells extends JavaPlugin {
         this.saveDefaultConfig();
 
         CellManager cellManager = new CellManager();
+        GUIManager guiManager = new GUIManager();
+        PlayerJailManager jailManager = new PlayerJailManager();
 
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "byzuscells")
             .argument(Player.class, new PlayerArgument(this.getServer()))
             .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("You must be a player to use this command."))
             .commandInstance(new CreateCellCommand(cellManager),
                 new PrisonPlayerCommand(),
-                new DeleteCellCommand(),
-                new JailPlayerCommand(),
-                new UnPrisonPlayerCommand(),
-                new UnJailPlayerCommand())
+                new DeleteCellCommand(cellManager),
+                new JailPlayerCommand(guiManager, jailManager),
+                new UnPrisonPlayerCommand(cellManager),
+                new UnJailPlayerCommand(jailManager))
             .invalidUsageHandler(new InvalidUsage())
             .permissionHandler(new PermissionMessage())
             .register();

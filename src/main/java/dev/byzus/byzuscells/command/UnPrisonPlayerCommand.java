@@ -19,6 +19,12 @@ import java.util.UUID;
 @Permission("byzuscells.unprison")
 public class UnPrisonPlayerCommand {
 
+    private final CellManager cellManager;
+
+    public UnPrisonPlayerCommand(CellManager cellManager) {
+        this.cellManager = cellManager;
+    }
+
     @Execute(required = 1)
     void execute(CommandSender sender, @Arg @Name("target") Player target) {
         if (target == null) {
@@ -28,7 +34,7 @@ public class UnPrisonPlayerCommand {
         UUID uuid = target.getUniqueId();
         Location targetLoc = PrisonPlayerCommand.locationData.get(target.getUniqueId());
         target.teleport(targetLoc.toBlockLocation());
-        CellManager.removePlayer(sender, uuid);
+        this.cellManager.removePlayer(sender, uuid);
 
         if (target.getPreviousGameMode() == null) {
             target.setGameMode(GameMode.SURVIVAL);

@@ -13,9 +13,15 @@ import org.bukkit.entity.Player;
 @Permission("byzuscells.unjail")
 public class UnJailPlayerCommand {
 
+    private final PlayerJailManager jailManager;
+
+    public UnJailPlayerCommand(PlayerJailManager jailManager) {
+        this.jailManager = jailManager;
+    }
+
     @Execute(required = 1)
     void execute(CommandSender sender, @Arg @Name("target") Player target) {
-        PlayerJailManager.unJail(sender, target);
+        this.jailManager.unJail(sender, target);
     }
 
 }
