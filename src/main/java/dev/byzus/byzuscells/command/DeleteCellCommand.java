@@ -13,11 +13,17 @@ import org.bukkit.command.CommandSender;
 @Permission("byzuscells.deletecell")
 public class DeleteCellCommand {
 
+    private final CellManager cellManager;
+
+    public DeleteCellCommand(CellManager cellManager) {
+        this.cellManager = cellManager;
+    }
+
     @Execute(required = 1)
     void executeSelf(CommandSender sender, @Arg @Name("id") int cellId) {
-        if (CellManager.findCell(cellId) == null) {
+        if (this.cellManager.findCell(cellId) == null) {
             sender.sendMessage(Components.error("This cell doesn't exist!"));
         }
-        CellManager.deleteCell(sender, cellId);
+        this.cellManager.deleteCell(sender, cellId);
     }
 }

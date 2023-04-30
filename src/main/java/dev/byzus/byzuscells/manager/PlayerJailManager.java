@@ -18,12 +18,12 @@ import java.util.UUID;
 
 public class PlayerJailManager {
 
-    public static final Map<Triple<Location, BlockData, BlockState>, UUID> jails = new HashMap<>();
     private static final Material MATERIAL = Material.GRAY_STAINED_GLASS;
     private static final Sound JAIL_SOUND = Sound.BLOCK_ANVIL_LAND;
     private static final Sound UNJAIL_SOUND = Sound.ENTITY_CAT_AMBIENT;
+    private final Map<Triple<Location, BlockData, BlockState>, UUID> jails = new HashMap<>();
 
-    public static void jail(CommandSender sender, Player target, int borderSize) {
+    public void jail(CommandSender sender, Player target, int borderSize) {
         if (target == null) {
             sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
             return;
@@ -44,10 +44,10 @@ public class PlayerJailManager {
             for (int y = -borderSize; y <= borderSize; y++) {
                 for (int z = -borderSize; z <= borderSize; z++) {
                     Location blockLoc = loc.toBlockLocation().clone().add(x, y, z);
-                    jails.put(Triple.of(blockLoc, blockLoc.getBlock().getBlockData(), blockLoc.getBlock().getState()), target.getUniqueId());
+                    this.jails.put(Triple.of(blockLoc, blockLoc.getBlock().getBlockData(), blockLoc.getBlock().getState()), target.getUniqueId());
                     blockLoc.getBlock().setType(MATERIAL);
                     if (borderSize == 1) {
-                        jails.put(Triple.of(target.getEyeLocation().toBlockLocation().add(0, 1, 0), target.getEyeLocation().toBlockLocation().getBlock().getBlockData(), target.getEyeLocation().toBlockLocation().getBlock().getState()), target.getUniqueId());
+                        this.jails.put(Triple.of(target.getEyeLocation().toBlockLocation().add(0, 1, 0), target.getEyeLocation().toBlockLocation().getBlock().getBlockData(), target.getEyeLocation().toBlockLocation().getBlock().getState()), target.getUniqueId());
                         target.getEyeLocation().toBlockLocation().add(0, 1, 0).getBlock().setType(MATERIAL);
                     }
                     target.getLocation().toBlockLocation().getBlock().setType(Material.AIR);
@@ -57,12 +57,12 @@ public class PlayerJailManager {
         }
     }
 
-    public static void unJail(CommandSender sender, Player target) {
+    public void unJail(CommandSender sender, Player target) {
         if (target == null) {
             sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
             return;
         }
-        boolean exists = jails.containsValue(target.getUniqueId());
+        boolean exists = this.jails.containsValue(target.getUniqueId());
         if (!exists) {
             sender.sendMessage(Components.error("Player is not jailed!"));
             return;
@@ -79,13 +79,17 @@ public class PlayerJailManager {
         } else if (!(target.getPreviousGameMode() == null)) {
             target.setGameMode(target.getPreviousGameMode());
         }
-        for (Map.Entry<Triple<Location, BlockData, BlockState>, UUID> entry : jails.entrySet()) {
+        for (Map.Entry<Triple<Location, BlockData, BlockState>, UUID> entry : this.jails.entrySet()) {
             if (entry.getValue().equals(target.getUniqueId())) {
                 entry.getKey().getFirst().getBlock().setBlockData(entry.getKey().getSecond());
                 entry.getKey().getFirst().getBlock().getState().update(true);
             }
         }
-        jails.clear();
+        this.jails.clear();
         sender.sendMessage(Components.success("Player has been successfully unjailed."));
+    }
+
+    public Map<Triple<Location, BlockData, BlockState>, UUID> getJails() {
+        return this.jails;
     }
 }

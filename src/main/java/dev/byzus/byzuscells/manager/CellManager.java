@@ -17,10 +17,10 @@ import java.util.UUID;
 
 public class CellManager {
 
-    private static final Map<Cell, UUID> cells = new HashMap<>();
+    private final Map<Cell, UUID> cells = new HashMap<>();
 
-    public static Cell findCell(int id) {
-        for (Cell cell : getCells().keySet()) {
+    public Cell findCell(int id) {
+        for (Cell cell : this.getCells().keySet()) {
             if (cell.getId() == id) {
                 return cell;
             }
@@ -28,29 +28,29 @@ public class CellManager {
         return null;
     }
 
-    public static Result<Cell, Exception> createCell(int id, double x, double y, double z, World world) {
-        for (Cell cell : CellManager.getCells().keySet()) {
+    public Result<Cell, Exception> createCell(int id, double x, double y, double z, World world) {
+        for (Cell cell : this.getCells().keySet()) {
             if (cell.getId() == id) {
                 return Result.error(new CellAlreadyExistsException("Cell of the same number already exists!"));
             }
         }
-        CellManager.getCells().put(new Cell(new Location(world, x, y, z), id), null);
+        this.getCells().put(new Cell(new Location(world, x, y, z), id), null);
         return Result.ok(new Cell(new Location(world, x, y, z), id));
     }
 
-    public static void deleteCell(CommandSender sender, int id) {
-        Cell cell = findCell(id);
+    public void deleteCell(CommandSender sender, int id) {
+        Cell cell = this.findCell(id);
         if (cell == null) {
             sender.sendMessage(Components.error("This cell doesn't exist!"));
             return;
         }
-        CellManager.getCells().remove(cell);
+        this.getCells().remove(cell);
         sender.sendMessage(Components.success("Successfully deleted cell of number: ").append(Component.text(id)));
     }
 
-    public static void addPlayer(int cellId, CommandSender sender, UUID target) {
+    public void addPlayer(int cellId, CommandSender sender, UUID target) {
         Player player = Bukkit.getPlayer(target);
-        Cell cell = findCell(cellId);
+        Cell cell = this.findCell(cellId);
         if (cell == null) {
             sender.sendMessage(Components.error("This cell doesn't exist!"));
             return;
@@ -60,20 +60,20 @@ public class CellManager {
             sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(player.getName())));
         }
 
-        CellManager.getCells().putIfAbsent(cell, target);
+        this.getCells().putIfAbsent(cell, target);
         player.teleport(cell.getLocation());
     }
 
-    public static void addPlayer(int cellId, CommandSender sender, Player target) {
-        addPlayer(cellId, sender, target.getUniqueId());
+    public void addPlayer(int cellId, CommandSender sender, Player target) {
+        this.addPlayer(cellId, sender, target.getUniqueId());
     }
 
-    public static void removePlayer(CommandSender sender, UUID target) {
-        CellManager.getCells().values().remove(target);
+    public void removePlayer(CommandSender sender, UUID target) {
+        this.getCells().values().remove(target);
     }
 
-    public static Map<Cell, UUID> getCells() {
-        return cells;
+    public Map<Cell, UUID> getCells() {
+        return this.cells;
     }
 
 }

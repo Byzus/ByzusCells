@@ -16,6 +16,14 @@ import org.bukkit.entity.Player;
 @Permission("byzuscells.jail")
 public class JailPlayerCommand {
 
+    private final GUIManager guiManager;
+    private final PlayerJailManager jailManager;
+
+    public JailPlayerCommand(GUIManager guiManager, PlayerJailManager jailManager) {
+        this.guiManager = guiManager;
+        this.jailManager = jailManager;
+    }
+
     @Execute(required = 2)
     void execute(CommandSender sender, @Arg @Name("target") Player target, @Arg @Name("radius") int borderSize) {
         if (target == null) {
@@ -26,16 +34,16 @@ public class JailPlayerCommand {
             sender.sendMessage(Components.error("Border size can't be 0 or less."));
         }
 
-        if (PlayerJailManager.jails.values().contains(target.getUniqueId())) {
+        if (this.jailManager.getJails().values().contains(target.getUniqueId())) {
             sender.sendMessage(Components.success("Player has been jailed."));
         }
-        PlayerJailManager.jail(sender, target, borderSize);
+        this.jailManager.jail(sender, target, borderSize);
     }
 
     @Execute(required = 0)
     void executeGUI(CommandSender sender) {
         Player target = (Player) sender;
-        GUIManager.jailGUI(target);
+        this.guiManager.jailGUI(target);
     }
 
 }

@@ -14,9 +14,15 @@ import org.bukkit.entity.Player;
 @Permission("byzuscells.createcell")
 public class CreateCellCommand {
 
+    private final CellManager cellManager;
+
+    public CreateCellCommand(CellManager cellManager) {
+        this.cellManager = cellManager;
+    }
+
     @Execute(required = 4)
     void execute(Player sender, @Arg double x, @Arg double y, @Arg double z, @Arg int cellId) {
-        CellManager.createCell(cellId, x, y, z, sender.getWorld());
+        this.cellManager.createCell(cellId, x, y, z, sender.getWorld());
         sender.sendMessage(Components.success("Successfully created cell of number: ").append(Component.text(cellId)));
     }
 
@@ -26,10 +32,10 @@ public class CreateCellCommand {
         double x = loc.getX();
         double y = loc.getY();
         double z = loc.getZ();
-        if (CellManager.findCell(cellId) != null) {
+        if (this.cellManager.findCell(cellId) != null) {
             sender.sendMessage(Components.error("Cell of this same number already exists!"));
         }
-        CellManager.createCell(cellId, x, y, z, sender.getWorld());
+        this.cellManager.createCell(cellId, x, y, z, sender.getWorld());
         sender.sendMessage(Components.success("Successfully created cell of number: ").append(Component.text(cellId)));
 
     }

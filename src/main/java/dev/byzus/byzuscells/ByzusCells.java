@@ -10,6 +10,7 @@ import dev.byzus.byzuscells.command.UnPrisonPlayerCommand;
 import dev.byzus.byzuscells.command.argument.PlayerArgument;
 import dev.byzus.byzuscells.command.handler.InvalidUsage;
 import dev.byzus.byzuscells.command.handler.PermissionMessage;
+import dev.byzus.byzuscells.manager.CellManager;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -33,10 +34,12 @@ public final class ByzusCells extends JavaPlugin {
         this.getConfig().options().copyDefaults();
         this.saveDefaultConfig();
 
+        CellManager cellManager = new CellManager();
+
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "byzuscells")
             .argument(Player.class, new PlayerArgument(this.getServer()))
             .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("You must be a player to use this command."))
-            .commandInstance(new CreateCellCommand(),
+            .commandInstance(new CreateCellCommand(cellManager),
                 new PrisonPlayerCommand(),
                 new DeleteCellCommand(),
                 new JailPlayerCommand(),
@@ -49,6 +52,7 @@ public final class ByzusCells extends JavaPlugin {
         long millis = started.elapsed(TimeUnit.MILLISECONDS);
         this.getLogger().info("Successfully enabled ByzusCells in " + millis + "ms");
     }
+    
 
     @Override
     public void onDisable() {

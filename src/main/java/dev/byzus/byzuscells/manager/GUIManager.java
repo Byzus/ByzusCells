@@ -12,23 +12,26 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+// TODO: GUI interaction
+
 public class GUIManager {
 
     private static final int[] slots = {1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 18, 26, 27, 35, 36, 37, 38, 39, 40, 41, 42, 43};
 
-    private static void decorateGUI(Inventory inventory) {
+    private void decorateGUI(Inventory inventory) {
 
         ItemStack frame = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
         for (int i = 0; i < inventory.getSize(); i++) {
             for (int slot : slots) {
                 if (i == slot) {
+                    assert inventory.getItem(i) != null;
                     inventory.setItem(i, frame);
                 }
             }
         }
     }
 
-    public static void showOnlinePlayersGui(Inventory inventory, Player target) {
+    public void showOnlinePlayersGui(Inventory inventory, Player target) {
         for (int i = 0; i < inventory.getSize(); i++) {
             int finalI = i;
             Bukkit.getServer().getOnlinePlayers().forEach(player -> {
@@ -44,14 +47,11 @@ public class GUIManager {
     }
 
 
-    public static void jailGUI(Player target) {
+    public void jailGUI(Player target) {
         Inventory inventory = Bukkit.createInventory(target, 44, Components.info("Jail GUI"));
-
         ItemStack exitButton = new ItemStack(Material.BARRIER);
         inventory.setItem(44, exitButton);
-
-
-        decorateGUI(inventory);
-        target.openInventory(inventory);
+        this.decorateGUI(inventory);
+        this.showOnlinePlayersGui(inventory, target);
     }
 }
