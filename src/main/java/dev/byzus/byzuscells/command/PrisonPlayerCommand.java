@@ -23,6 +23,12 @@ public class PrisonPlayerCommand {
 
     public static final Map<UUID, Location> locationData = new HashMap<>();
 
+    private final CellManager cellManager;
+
+    public PrisonPlayerCommand(CellManager cellManager) {
+        this.cellManager = cellManager;
+    }
+
     @Execute(required = 2)
     void execute(CommandSender sender, @Arg @Name("target") Player target, @Arg @Name("id") int cellId) {
         if (target == null) {
@@ -31,7 +37,7 @@ public class PrisonPlayerCommand {
         }
         UUID uuid = target.getUniqueId();
         locationData.put(uuid, target.getLocation());
-        CellManager.addPlayer(cellId, sender, uuid);
+        this.cellManager.addPlayer(cellId, sender, uuid);
         target.setGameMode(GameMode.ADVENTURE);
         sender.sendMessage(Components.success("Successfully added player to cell."));
 

@@ -44,7 +44,7 @@ public final class ByzusCells extends JavaPlugin {
             .argument(Player.class, new PlayerArgument(this.getServer()))
             .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("You must be a player to use this command."))
             .commandInstance(new CreateCellCommand(cellManager),
-                new PrisonPlayerCommand(),
+                new PrisonPlayerCommand(cellManager),
                 new DeleteCellCommand(cellManager),
                 new JailPlayerCommand(guiManager, jailManager),
                 new UnPrisonPlayerCommand(cellManager),

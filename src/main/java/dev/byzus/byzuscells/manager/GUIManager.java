@@ -24,7 +24,7 @@ public class GUIManager {
         for (int i = 0; i < inventory.getSize(); i++) {
             for (int slot : slots) {
                 if (i == slot) {
-                    assert inventory.getItem(i) != null;
+                    assert inventory.getItem(i) == null;
                     inventory.setItem(i, frame);
                 }
             }
