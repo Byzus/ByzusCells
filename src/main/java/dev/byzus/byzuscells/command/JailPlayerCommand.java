@@ -41,9 +41,8 @@ public class JailPlayerCommand {
     }
 
     @Execute(required = 0)
-    void executeGUI(CommandSender sender) {
+    void jailGui(CommandSender sender) {
         Player target = (Player) sender;
         this.guiManager.jailGUI(target);
     }
-
 }

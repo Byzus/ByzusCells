@@ -30,6 +30,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.26")
     api("org.jetbrains:annotations:24.0.1")
     implementation("org.panda-lang:panda-utilities:0.5.2-alpha")
+    implementation("dev.triumphteam:triumph-gui:3.1.5")
 
 }
 

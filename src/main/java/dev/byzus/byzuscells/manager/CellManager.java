@@ -21,7 +21,7 @@ public class CellManager {
 
     public Cell findCell(int id) {
         for (Cell cell : this.getCells().keySet()) {
-            if (cell.getId() == id) {
+            if (cell.id() == id) {
                 return cell;
             }
         }
@@ -30,7 +30,7 @@ public class CellManager {
 
     public Result<Cell, Exception> createCell(int id, double x, double y, double z, World world) {
         for (Cell cell : this.getCells().keySet()) {
-            if (cell.getId() == id) {
+            if (cell.id() == id) {
                 return Result.error(new CellAlreadyExistsException("Cell of the same number already exists!"));
             }
         }
@@ -61,7 +61,7 @@ public class CellManager {
         }
 
         this.getCells().putIfAbsent(cell, target);
-        player.teleport(cell.getLocation());
+        player.teleport(cell.location());
     }
 
     public void addPlayer(int cellId, CommandSender sender, Player target) {

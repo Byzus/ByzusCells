@@ -33,8 +33,6 @@ public final class ByzusCells extends JavaPlugin {
     public void onEnable() {
         Stopwatch started = Stopwatch.createStarted();
         instance = this;
-        this.getConfig().options().copyDefaults();
-        this.saveDefaultConfig();
 
         CellManager cellManager = new CellManager();
         GUIManager guiManager = new GUIManager();
@@ -56,7 +54,6 @@ public final class ByzusCells extends JavaPlugin {
         long millis = started.elapsed(TimeUnit.MILLISECONDS);
         this.getLogger().info("Successfully enabled ByzusCells in " + millis + "ms");
     }
-    
 
     @Override
     public void onDisable() {
