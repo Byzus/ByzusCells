@@ -10,6 +10,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import panda.std.Blank;
+import panda.std.Result;
 import panda.std.Triple;
 
 import java.util.HashMap;
@@ -23,16 +25,15 @@ public class PlayerJailManager {
     private static final Sound UNJAIL_SOUND = Sound.ENTITY_CAT_AMBIENT;
     private final Map<Triple<Location, BlockData, BlockState>, UUID> jails = new HashMap<>();
 
-    public void jail(CommandSender sender, Player target, int borderSize) {
+    public Result<Blank, Exception> jail(CommandSender sender, Player target, int borderSize) {
         if (target == null) {
-            sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
-            return;
+            sender.sendMessage(Components.error("Cannot find player with that name!"));
+            return Result.error(new NullPointerException("Player is null!"));
         }
         Location loc = target.getLocation();
-        sender.sendMessage(Components.success("Player has been jailed."));
 
-        if (sender instanceof Player sender_player) {
-            target.sendMessage(Components.error("You have been jailed by: ").append(Component.text(sender_player.getName())));
+        if (sender instanceof Player) {
+            target.sendMessage(Components.error("You have been jailed by: ").append(Component.text(sender.getName())));
         } else {
             target.sendMessage(Components.error("You have been jailed"));
         }
@@ -55,30 +56,31 @@ public class PlayerJailManager {
                 }
             }
         }
+        sender.sendMessage(Components.success("Player has been jailed."));
+        return Result.ok();
     }
 
-    public void unJail(CommandSender sender, Player target) {
+    public Result<Blank, Exception> unJail(CommandSender sender, Player target) {
         if (target == null) {
-            sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
-            return;
+            sender.sendMessage(Components.error("Cannot find player with that name!"));
+            return Result.error(new NullPointerException("Player is null!"));
         }
+
         boolean exists = this.jails.containsValue(target.getUniqueId());
+
         if (!exists) {
             sender.sendMessage(Components.error("Player is not jailed!"));
-            return;
+            return Result.error(new NullPointerException("Player is not jailed!"));
         }
-        if (sender instanceof Player) {
-            target.sendMessage(Components.success("You have been unjailed by: ").append(Component.text(sender.getName())));
-        } else {
-            Components.success("You have been unjailed");
-        }
+
         target.playSound(target, UNJAIL_SOUND, 0.25F, 0.5F);
 
         if (target.getPreviousGameMode() == null) {
             target.setGameMode(GameMode.SURVIVAL);
-        } else if (!(target.getPreviousGameMode() == null)) {
+        } else {
             target.setGameMode(target.getPreviousGameMode());
         }
+
         for (Map.Entry<Triple<Location, BlockData, BlockState>, UUID> entry : this.jails.entrySet()) {
             if (entry.getValue().equals(target.getUniqueId())) {
                 entry.getKey().getFirst().getBlock().setBlockData(entry.getKey().getSecond());
@@ -87,6 +89,13 @@ public class PlayerJailManager {
         }
         this.jails.clear();
         sender.sendMessage(Components.success("Player has been successfully unjailed."));
+
+        if (sender instanceof Player) {
+            target.sendMessage(Components.success("You have been unjailed by: ").append(Component.text(sender.getName())));
+        } else {
+            Components.success("You have been unjailed");
+        }
+        return Result.ok();
     }
 
     public Map<Triple<Location, BlockData, BlockState>, UUID> getJails() {

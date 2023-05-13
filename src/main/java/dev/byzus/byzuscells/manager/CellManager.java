@@ -1,14 +1,12 @@
 package dev.byzus.byzuscells.manager;
 
 import dev.byzus.byzuscells.cell.Cell;
-import dev.byzus.byzuscells.component.Components;
 import dev.byzus.byzuscells.exception.CellAlreadyExistsException;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import panda.std.Blank;
 import panda.std.Result;
 
 import java.util.HashMap;
@@ -34,41 +32,40 @@ public class CellManager {
                 return Result.error(new CellAlreadyExistsException("Cell of the same number already exists!"));
             }
         }
-        this.getCells().put(new Cell(new Location(world, x, y, z), id), null);
-        return Result.ok(new Cell(new Location(world, x, y, z), id));
+        Cell cell = new Cell(new Location(world, x, y, z), id);
+        this.getCells().put(cell, null);
+        return Result.ok(cell);
     }
 
-    public void deleteCell(CommandSender sender, int id) {
+    public void deleteCell(int id) {
         Cell cell = this.findCell(id);
         if (cell == null) {
-            sender.sendMessage(Components.error("This cell doesn't exist!"));
             return;
         }
         this.getCells().remove(cell);
-        sender.sendMessage(Components.success("Successfully deleted cell of number: ").append(Component.text(id)));
     }
 
-    public void addPlayer(int cellId, CommandSender sender, UUID target) {
+    public Result<Blank, Exception> addPlayer(int cellId, UUID target) {
         Player player = Bukkit.getPlayer(target);
         Cell cell = this.findCell(cellId);
         if (cell == null) {
-            sender.sendMessage(Components.error("This cell doesn't exist!"));
-            return;
+            return Result.error(new NullPointerException("This cell doesn't exist!"));
         }
 
         if (player == null) {
-            sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(player.getName())));
+            return Result.error(new NullPointerException("Cannot find player with this UUID!"));
         }
 
         this.getCells().putIfAbsent(cell, target);
         player.teleport(cell.location());
+        return Result.ok();
     }
 
-    public void addPlayer(int cellId, CommandSender sender, Player target) {
-        this.addPlayer(cellId, sender, target.getUniqueId());
+    public Result<Blank, Exception> addPlayer(int cellId, Player target) {
+        return this.addPlayer(cellId, target.getUniqueId());
     }
 
-    public void removePlayer(CommandSender sender, UUID target) {
+    public void removePlayer(UUID target) {
         this.getCells().values().remove(target);
     }
 

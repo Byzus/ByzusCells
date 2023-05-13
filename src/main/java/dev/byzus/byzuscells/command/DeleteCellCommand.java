@@ -24,6 +24,7 @@ public class DeleteCellCommand {
         if (this.cellManager.findCell(cellId) == null) {
             sender.sendMessage(Components.error("This cell doesn't exist!"));
         }
-        this.cellManager.deleteCell(sender, cellId);
+        this.cellManager.deleteCell(cellId);
+        sender.sendMessage(Components.success("Successfully deleted cell of ID: ").append(Components.success(String.valueOf(cellId))));
     }
 }

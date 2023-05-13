@@ -7,11 +7,12 @@ import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
-import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import panda.std.Blank;
+import panda.std.Result;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,15 +33,19 @@ public class PrisonPlayerCommand {
     @Execute(required = 2)
     void execute(CommandSender sender, @Arg @Name("target") Player target, @Arg @Name("id") int cellId) {
         if (target == null) {
-            sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
+            sender.sendMessage(Components.error("Cannot find player with that name."));
             return;
         }
+
         UUID uuid = target.getUniqueId();
         locationData.put(uuid, target.getLocation());
-        this.cellManager.addPlayer(cellId, sender, uuid);
-        target.setGameMode(GameMode.ADVENTURE);
-        sender.sendMessage(Components.success("Successfully added player to cell."));
+        Result<Blank, Exception> result = this.cellManager.addPlayer(cellId, uuid);
 
+        if (result.isOk()) {
+            target.setGameMode(GameMode.ADVENTURE);
+            sender.sendMessage(Components.success("Successfully added player to cell!"));
+        } else {
+            sender.sendMessage(Components.error("Cannot add player to that cell!"));
+        }
     }
-
 }

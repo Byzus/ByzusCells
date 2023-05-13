@@ -27,14 +27,14 @@ public class JailPlayerCommand {
     @Execute(required = 2)
     void execute(CommandSender sender, @Arg @Name("target") Player target, @Arg @Name("radius") int borderSize) {
         if (target == null) {
-            sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
+            sender.sendMessage(Components.error("Invalid player: ").append(Component.text(target.getName())));
         }
 
         if (borderSize <= 0) {
             sender.sendMessage(Components.error("Border size can't be 0 or less."));
         }
 
-        if (this.jailManager.getJails().values().contains(target.getUniqueId())) {
+        if (this.jailManager.getJails().containsValue(target.getUniqueId())) {
             sender.sendMessage(Components.success("Player has been jailed."));
         }
         this.jailManager.jail(sender, target, borderSize);
@@ -43,6 +43,6 @@ public class JailPlayerCommand {
     @Execute(required = 0)
     void jailGui(CommandSender sender) {
         Player target = (Player) sender;
-        this.guiManager.jailGUI(target);
+        this.guiManager.showJailGUI(target);
     }
 }

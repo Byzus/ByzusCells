@@ -1,12 +1,14 @@
 package dev.byzus.byzuscells;
 
 import com.google.common.base.Stopwatch;
+import dev.byzus.byzuscells.cell.Cell;
 import dev.byzus.byzuscells.command.CreateCellCommand;
 import dev.byzus.byzuscells.command.DeleteCellCommand;
 import dev.byzus.byzuscells.command.JailPlayerCommand;
 import dev.byzus.byzuscells.command.PrisonPlayerCommand;
 import dev.byzus.byzuscells.command.UnJailPlayerCommand;
 import dev.byzus.byzuscells.command.UnPrisonPlayerCommand;
+import dev.byzus.byzuscells.command.argument.CellArgument;
 import dev.byzus.byzuscells.command.argument.PlayerArgument;
 import dev.byzus.byzuscells.command.handler.InvalidUsage;
 import dev.byzus.byzuscells.command.handler.PermissionMessage;
@@ -28,7 +30,6 @@ public final class ByzusCells extends JavaPlugin {
 
     private LiteCommands<CommandSender> liteCommands;
 
-
     @Override
     public void onEnable() {
         Stopwatch started = Stopwatch.createStarted();
@@ -40,6 +41,7 @@ public final class ByzusCells extends JavaPlugin {
 
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "byzuscells")
             .argument(Player.class, new PlayerArgument(this.getServer()))
+            .argument(Cell.class, new CellArgument(cellManager))
             .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("You must be a player to use this command."))
             .commandInstance(new CreateCellCommand(cellManager),
                 new PrisonPlayerCommand(cellManager),
@@ -51,13 +53,16 @@ public final class ByzusCells extends JavaPlugin {
             .permissionHandler(new PermissionMessage())
             .register();
 
-        long millis = started.elapsed(TimeUnit.MILLISECONDS);
+        long millis = started.stop().elapsed(TimeUnit.MILLISECONDS);
         this.getLogger().info("Successfully enabled ByzusCells in " + millis + "ms");
     }
 
     @Override
     public void onDisable() {
-
+        if (this.liteCommands.getPlatform() != null) {
+            this.liteCommands.getPlatform().unregisterAll();
+        }
+        instance = null;
     }
 
     public static ByzusCells getInstance() {

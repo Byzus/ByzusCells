@@ -11,38 +11,19 @@ import dev.triumphteam.gui.guis.GuiItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 
 public class GUIManager {
 
-    @Deprecated
-    public void showOnlinePlayersGui(Inventory inventory, Player target) {
-        for (int i = 0; i < inventory.getSize(); i++) {
-            int finalI = i;
-            Bukkit.getServer().getOnlinePlayers().forEach(player -> {
-                    ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1, (byte) 3);
-                    SkullMeta meta = (SkullMeta) skull.getItemMeta();
-                    meta.setOwningPlayer(player);
-                    meta.setPlayerProfile(player.getPlayerProfile());
-                    skull.setItemMeta(meta);
-                    inventory.setItem(finalI, skull);
-                });
-            target.openInventory(inventory);
-        }
-    }
-
-    public void jailGUI(Player target) {
+    public void showJailGUI(Player target) {
 
         GuiItem closeButton = new GuiItem(Material.BARRIER);
-        int slots = 53;
 
         Gui gui = Gui.gui()
             .type(GuiType.CHEST)
-            .title(Components.fatal("Jail GUI"))
+            .title(Components.error("Jail GUI"))
             .disableAllInteractions()
             .rows(6)
             .create();

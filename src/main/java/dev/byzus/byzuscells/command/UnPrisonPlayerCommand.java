@@ -7,7 +7,6 @@ import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
-import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -28,17 +27,17 @@ public class UnPrisonPlayerCommand {
     @Execute(required = 1)
     void execute(CommandSender sender, @Arg @Name("target") Player target) {
         if (target == null) {
-            sender.sendMessage(Components.error("Cannot find player with name: ").append(Component.text(target.getName())));
+            sender.sendMessage(Components.error("Cannot find player with given name!: "));
             return;
         }
         UUID uuid = target.getUniqueId();
         Location targetLoc = PrisonPlayerCommand.locationData.get(target.getUniqueId());
         target.teleport(targetLoc.toBlockLocation());
-        this.cellManager.removePlayer(sender, uuid);
+        this.cellManager.removePlayer(uuid);
 
         if (target.getPreviousGameMode() == null) {
             target.setGameMode(GameMode.SURVIVAL);
-        } else if (!(target.getPreviousGameMode() == null)) {
+        } else {
             target.setGameMode(target.getPreviousGameMode());
         }
         sender.sendMessage(Components.success("Successfully removed player from cell."));
