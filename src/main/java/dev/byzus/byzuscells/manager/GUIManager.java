@@ -15,6 +15,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.List;
+
 public class GUIManager {
 
     @Deprecated
@@ -36,7 +38,7 @@ public class GUIManager {
     public void jailGUI(Player target) {
 
         GuiItem closeButton = new GuiItem(Material.BARRIER);
-        int slots = 54;
+        int slots = 53;
 
         Gui gui = Gui.gui()
             .type(GuiType.CHEST)
@@ -45,20 +47,17 @@ public class GUIManager {
             .rows(6)
             .create();
 
-        gui.setItem(54,closeButton);
-        gui.addSlotAction(54, event -> gui.close(target));
+        gui.setItem(53,closeButton);
+        gui.addSlotAction(53, event -> gui.close(target));
+        List<? extends Player> players = Bukkit.getServer().getOnlinePlayers().stream().toList();
 
-        for (int i = 0; i < slots; i++) {
-            int finalI = i;
-            Bukkit.getServer().getOnlinePlayers().forEach(player -> {
-                GuiItem skull = new GuiItem(Material.PLAYER_HEAD);
-                SkullMeta meta = (SkullMeta) skull.getItemStack().getItemMeta();
-                meta.setOwningPlayer(player);
-                meta.setPlayerProfile(player.getPlayerProfile());
-                skull.getItemStack().setItemMeta(meta);
-                gui.setItem(finalI, skull);
-            });
-
+        for (int i = 0; i < players.size(); i++) {
+            GuiItem skull = new GuiItem(Material.PLAYER_HEAD);
+            SkullMeta meta = (SkullMeta) skull.getItemStack().getItemMeta();
+            meta.setOwningPlayer(players.get(i));
+            meta.setPlayerProfile(players.get(i).getPlayerProfile());
+            skull.getItemStack().setItemMeta(meta);
+            gui.setItem(i, skull);
         }
         gui.open(target);
     }
