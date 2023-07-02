@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Route(name = "prison", aliases = "addplayer")
+@Route(name = "prison")
 @Permission("byzuscells.prison")
 public class PrisonPlayerCommand {
 

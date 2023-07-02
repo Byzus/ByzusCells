@@ -24,7 +24,7 @@ public class InvalidUsage implements InvalidUsageHandler<CommandSender> {
             Formatter formatter = new Formatter()
                 .register("{USAGE}", scheme);
 
-            sender.sendMessage(formatter.format("&7» &c{USAGE}"));
+            sender.sendMessage(Components.custom("» ", 70, 70, 70).append(Components.error(formatter.format("{USAGE}"))));
         }
 
     }

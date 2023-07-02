@@ -23,6 +23,7 @@ public class DeleteCellCommand {
     void executeSelf(CommandSender sender, @Arg @Name("id") int cellId) {
         if (this.cellManager.findCell(cellId) == null) {
             sender.sendMessage(Components.error("This cell doesn't exist!"));
+            return;
         }
         this.cellManager.deleteCell(cellId);
         sender.sendMessage(Components.success("Successfully deleted cell of ID: ").append(Components.success(String.valueOf(cellId))));

@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Route(name = "unprison", aliases = "removeplayer")
+@Route(name = "unprison")
 @Permission("byzuscells.unprison")
 public class UnPrisonPlayerCommand {
 
@@ -32,6 +32,10 @@ public class UnPrisonPlayerCommand {
         }
         UUID uuid = target.getUniqueId();
         Location targetLoc = PrisonPlayerCommand.locationData.get(target.getUniqueId());
+        if (targetLoc == null) {
+            sender.sendMessage(Components.error("This player is not in cell!"));
+            return;
+        }
         target.teleport(targetLoc.toBlockLocation());
         this.cellManager.removePlayer(uuid);
 

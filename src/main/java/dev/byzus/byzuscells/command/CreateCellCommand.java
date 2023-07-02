@@ -37,6 +37,7 @@ public class CreateCellCommand {
         double z = loc.getZ();
         if (this.cellManager.findCell(cellId) != null) {
             sender.sendMessage(Components.error("Cell of this same ID already exists!"));
+            return;
         }
         Result<Cell, Exception> result = this.cellManager.createCell(cellId, x, y, z, sender.getWorld());
 
