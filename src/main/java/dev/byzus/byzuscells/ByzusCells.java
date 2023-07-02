@@ -36,19 +36,20 @@ public final class ByzusCells extends JavaPlugin {
         instance = this;
 
         CellManager cellManager = new CellManager();
-        GUIManager guiManager = new GUIManager();
         PlayerJailManager jailManager = new PlayerJailManager();
+        GUIManager guiManager = new GUIManager(jailManager, cellManager, this.getServer());
 
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "byzuscells")
             .argument(Player.class, new PlayerArgument(this.getServer()))
             .argument(Cell.class, new CellArgument(cellManager))
             .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("You must be a player to use this command."))
-            .commandInstance(new CreateCellCommand(cellManager),
+            .commandInstance(
+                new CreateCellCommand(cellManager),
                 new PrisonPlayerCommand(cellManager),
                 new DeleteCellCommand(cellManager),
                 new JailPlayerCommand(guiManager, jailManager),
-                new UnPrisonPlayerCommand(cellManager),
-                new UnJailPlayerCommand(jailManager))
+                new UnPrisonPlayerCommand(cellManager, guiManager),
+                new UnJailPlayerCommand(jailManager, guiManager))
             .invalidUsageHandler(new InvalidUsage())
             .permissionHandler(new PermissionMessage())
             .register();

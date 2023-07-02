@@ -2,6 +2,7 @@ package dev.byzus.byzuscells.command;
 
 import dev.byzus.byzuscells.component.Components;
 import dev.byzus.byzuscells.manager.CellManager;
+import dev.byzus.byzuscells.manager.GUIManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
@@ -19,9 +20,11 @@ import java.util.UUID;
 public class UnPrisonPlayerCommand {
 
     private final CellManager cellManager;
+    private final GUIManager guiManager;
 
-    public UnPrisonPlayerCommand(CellManager cellManager) {
+    public UnPrisonPlayerCommand(CellManager cellManager, GUIManager guiManager) {
         this.cellManager = cellManager;
+        this.guiManager = guiManager;
     }
 
     @Execute(required = 1)
@@ -45,6 +48,13 @@ public class UnPrisonPlayerCommand {
             target.setGameMode(target.getPreviousGameMode());
         }
         sender.sendMessage(Components.success("Successfully removed player from cell."));
+    }
+
+    @Execute(required = 0)
+    void executeGui(CommandSender sender) {
+        Player target = (Player) sender;
+        this.guiManager.showUnPrisonGUI(target);
+
     }
 
 }

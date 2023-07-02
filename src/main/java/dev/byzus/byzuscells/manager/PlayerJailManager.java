@@ -10,6 +10,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import panda.std.Blank;
 import panda.std.Result;
 import panda.std.Triple;
@@ -25,7 +27,7 @@ public class PlayerJailManager {
     private static final Sound UNJAIL_SOUND = Sound.ENTITY_CAT_AMBIENT;
     private final Map<Triple<Location, BlockData, BlockState>, UUID> jails = new HashMap<>();
 
-    public Result<Blank, Exception> jail(CommandSender sender, Player target, int borderSize) {
+    public Result<Blank, Exception> jail(@Nullable CommandSender sender, @NotNull Player target, int borderSize) {
         if (target == null) {
             sender.sendMessage(Components.error("Cannot find player with that name!"));
             return Result.error(new NullPointerException("Player is null!"));
@@ -56,7 +58,9 @@ public class PlayerJailManager {
                 }
             }
         }
-        sender.sendMessage(Components.success("Player has been jailed."));
+        if (sender != null) {
+            sender.sendMessage(Components.success("Player has been jailed."));
+        }
         return Result.ok();
     }
 

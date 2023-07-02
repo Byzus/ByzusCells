@@ -11,6 +11,7 @@ import dev.rollczi.litecommands.command.route.Route;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import panda.std.Result;
 
 @Route(name = "createcell")
@@ -24,7 +25,7 @@ public class CreateCellCommand {
     }
 
     @Execute(required = 4)
-    void execute(Player sender, @Arg double x, @Arg double y, @Arg double z, @Arg int cellId) {
+    void execute(@NotNull Player sender, @Arg double x, @Arg double y, @Arg double z, @Arg int cellId) {
         this.cellManager.createCell(cellId, x, y, z, sender.getWorld());
         sender.sendMessage(Components.success("Successfully created cell of ID: ").append(Component.text(cellId)));
     }
