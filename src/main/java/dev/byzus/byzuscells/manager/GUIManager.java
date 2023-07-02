@@ -63,7 +63,7 @@ public class GUIManager {
 
         this.jailManager.getJails().values()
             .stream()
-            // TODO: Filter duplicates, keep only one UUID
+            .distinct()
             .map(this.server::getPlayer)
             .forEach(player -> {
                 GuiItem skull = new GuiItem(Material.PLAYER_HEAD, event -> {
