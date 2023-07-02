@@ -2,9 +2,9 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
     id("java-library")
-    id("com.github.johnrengelman.shadow") version "8.1.0"
-    id("xyz.jpenilla.run-paper") version "2.0.0"
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("xyz.jpenilla.run-paper") version "2.1.0"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
 }
 
 group = "dev.byzus"
@@ -23,11 +23,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
-    implementation("dev.rollczi.litecommands:bukkit:2.8.5")
+    compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
+    implementation("dev.rollczi.litecommands:bukkit:2.8.8")
     implementation("org.panda-lang:expressible:1.3.1")
     compileOnly("org.projectlombok:lombok:1.18.26")
-    annotationProcessor("org.projectlombok:lombok:1.18.26")
+    annotationProcessor("org.projectlombok:lombok:1.18.28")
     api("org.jetbrains:annotations:24.0.1")
     implementation("org.panda-lang:panda-utilities:0.5.2-alpha")
     implementation("dev.triumphteam:triumph-gui:3.1.5")
@@ -71,6 +71,6 @@ bukkit {
 
 tasks {
     runServer {
-        minecraftVersion("1.19.4")
+        minecraftVersion("1.20.1")
     }
 }

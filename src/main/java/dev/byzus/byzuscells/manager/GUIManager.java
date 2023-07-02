@@ -1,9 +1,5 @@
 package dev.byzus.byzuscells.manager;
 
-/*
- * NOTE: This feature is in beta version and it may be not done properly.
- */
-
 import dev.byzus.byzuscells.component.Components;
 import dev.triumphteam.gui.components.GuiType;
 import dev.triumphteam.gui.guis.Gui;

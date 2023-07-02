@@ -29,4 +29,8 @@ public class Components {
         return Component.text(text).color(TextColor.color(210, 0, 0));
     }
 
+    public static Component custom(String text, int r, int g, int b) {
+        return Component.text(text).color(TextColor.color(r, g, b));
+    }
+
 }
