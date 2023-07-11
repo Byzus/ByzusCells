@@ -37,15 +37,17 @@ public class GUIManager {
 
         for (int i = 0; i < players.size(); i++) {
             Player player = players.get(i);
-            GuiItem skull = new GuiItem(Material.PLAYER_HEAD, event -> {
-                this.jailManager.jail(target, player, 2);
-                gui.close(target);
-            });
-            SkullMeta meta = (SkullMeta) skull.getItemStack().getItemMeta();
-            meta.setOwningPlayer(player);
-            meta.setPlayerProfile(player.getPlayerProfile());
-            skull.getItemStack().setItemMeta(meta);
-            gui.setItem(i, skull);
+            if (!this.jailManager.getJails().containsValue(player.getUniqueId())) {
+                GuiItem skull = new GuiItem(Material.PLAYER_HEAD, event -> {
+                    this.jailManager.jail(target, player, 2);
+                    gui.close(target);
+                });
+                SkullMeta meta = (SkullMeta) skull.getItemStack().getItemMeta();
+                meta.setOwningPlayer(player);
+                meta.setPlayerProfile(player.getPlayerProfile());
+                skull.getItemStack().setItemMeta(meta);
+                gui.setItem(i, skull);
+            }
         }
         gui.open(target);
     }

@@ -38,10 +38,15 @@ public class PrisonPlayerCommand {
         }
 
         UUID uuid = target.getUniqueId();
-        locationData.put(uuid, target.getLocation());
+        locationData.putIfAbsent(uuid, target.getLocation());
+
         Result<Blank, Exception> result = this.cellManager.addPlayer(cellId, uuid);
 
         if (result.isOk()) {
+            if (locationData.containsKey(uuid)) {
+                sender.sendMessage(Components.info("This player is already in cell, however it's been teleported again."));
+                return;
+            }
             target.setGameMode(GameMode.ADVENTURE);
             sender.sendMessage(Components.success("Successfully added player to cell!"));
         } else {

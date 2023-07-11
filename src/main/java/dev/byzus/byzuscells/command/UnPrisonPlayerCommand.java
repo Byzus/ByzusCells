@@ -41,6 +41,7 @@ public class UnPrisonPlayerCommand {
         }
         target.teleport(targetLoc.toBlockLocation());
         this.cellManager.removePlayer(uuid);
+        PrisonPlayerCommand.locationData.remove(uuid);
 
         if (target.getPreviousGameMode() == null) {
             target.setGameMode(GameMode.SURVIVAL);
@@ -51,10 +52,7 @@ public class UnPrisonPlayerCommand {
     }
 
     @Execute(required = 0)
-    void executeGui(CommandSender sender) {
-        Player target = (Player) sender;
-        this.guiManager.showUnPrisonGUI(target);
-
+    void executeGui(Player sender) {
+        this.guiManager.showUnPrisonGUI(sender);
     }
-
 }

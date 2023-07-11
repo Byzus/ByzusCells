@@ -5,6 +5,7 @@ import dev.byzus.byzuscells.cell.Cell;
 import dev.byzus.byzuscells.command.CreateCellCommand;
 import dev.byzus.byzuscells.command.DeleteCellCommand;
 import dev.byzus.byzuscells.command.JailPlayerCommand;
+import dev.byzus.byzuscells.command.ListCellsCommand;
 import dev.byzus.byzuscells.command.PrisonPlayerCommand;
 import dev.byzus.byzuscells.command.UnJailPlayerCommand;
 import dev.byzus.byzuscells.command.UnPrisonPlayerCommand;
@@ -45,9 +46,10 @@ public final class ByzusCells extends JavaPlugin {
             .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("You must be a player to use this command."))
             .commandInstance(
                 new CreateCellCommand(cellManager),
-                new PrisonPlayerCommand(cellManager),
                 new DeleteCellCommand(cellManager),
                 new JailPlayerCommand(guiManager, jailManager),
+                new ListCellsCommand(this.getServer(), cellManager),
+                new PrisonPlayerCommand(cellManager),
                 new UnPrisonPlayerCommand(cellManager, guiManager),
                 new UnJailPlayerCommand(jailManager, guiManager))
             .invalidUsageHandler(new InvalidUsage())
