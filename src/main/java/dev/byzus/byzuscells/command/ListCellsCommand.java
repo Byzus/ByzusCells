@@ -10,6 +10,7 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Route(name = "listcells")
@@ -27,9 +28,15 @@ public class ListCellsCommand {
     @Execute
     void execute(Player sender) {
         sender.sendMessage(Components.info("List of cells: "));
-        for (Map.Entry<Cell, UUID> entry : this.cellManager.getCells().entrySet()) {
+        for (Map.Entry<Cell, Set<UUID>> entry : this.cellManager.getCells().entrySet()) {
             Cell cell = entry.getKey();
-            sender.sendMessage(Components.info("Cell #" + cell.id() + "[X: " + cell.location().x() + ", Z: " + cell.location().z() + "], Players: " + this.server.getPlayer(entry.getValue())));
+            sender.sendMessage(Components.info("Cell #" + cell.id() +
+                " [X: " + cell.location().x() + ", Z: " + cell.location().z() + "], Players: " + entry.getValue()
+                .stream()
+                .map(this.server::getPlayer)
+                .map(Player::getName)
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("none")));
         }
     }
 }

@@ -11,11 +11,12 @@ import panda.std.Result;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class CellManager {
 
-    private final Map<Cell, UUID> cells = new HashMap<>();
+    private final Map<Cell, Set<UUID>> cells = new HashMap<>();
 
     public Cell findCell(int id) {
         for (Cell cell : this.getCells().keySet()) {
@@ -56,7 +57,7 @@ public class CellManager {
             return Result.error(new NullPointerException("Cannot find player with this UUID!"));
         }
 
-        this.getCells().putIfAbsent(cell, target);
+        this.getCells().putIfAbsent(cell, Set.of(target));
         player.teleport(cell.location());
         return Result.ok();
     }
@@ -69,7 +70,7 @@ public class CellManager {
         this.getCells().values().remove(target);
     }
 
-    public Map<Cell, UUID> getCells() {
+    public Map<Cell, Set<UUID>> getCells() {
         return this.cells;
     }
 
