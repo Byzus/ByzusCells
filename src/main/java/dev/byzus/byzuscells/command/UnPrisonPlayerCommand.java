@@ -1,35 +1,58 @@
 package dev.byzus.byzuscells.command;
 
-import dev.byzus.byzuscells.cell.CellManager;
-import dev.byzus.byzuscells.translation.LanguageManager;
+import dev.byzus.byzuscells.component.Components;
+import dev.byzus.byzuscells.manager.CellManager;
+import dev.byzus.byzuscells.manager.GUIManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-@Route(name = "unprison", aliases = "removeplayer")
+@Route(name = "unprison")
 @Permission("byzuscells.unprison")
 public class UnPrisonPlayerCommand {
 
-    @Execute(required = 1)
-    void execute(CommandSender sender, @Arg @Name("target") String target) {
-        Player player = Bukkit.getPlayer(target);
-        if (player == null) {
-            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER);
-            return;
-        }
-        UUID uuid = player.getUniqueId();
-        player.teleport(PrisonPlayerCommand.playerPreviousLocation);
-        CellManager.removePlayer(sender, uuid);
-        player.setGameMode(GameMode.SURVIVAL);
-        sender.sendMessage(LanguageManager.PLAYER_ADDED_TO_CELL);
+    private final CellManager cellManager;
+    private final GUIManager guiManager;
+
+    public UnPrisonPlayerCommand(CellManager cellManager, GUIManager guiManager) {
+        this.cellManager = cellManager;
+        this.guiManager = guiManager;
     }
 
+    @Execute(required = 1)
+    void execute(CommandSender sender, @Arg @Name("target") Player target) {
+        if (target == null) {
+            sender.sendMessage(Components.error("Cannot find player with given name!: "));
+            return;
+        }
+        UUID uuid = target.getUniqueId();
+        Location targetLoc = PrisonPlayerCommand.locationData.get(target.getUniqueId());
+        if (targetLoc == null) {
+            sender.sendMessage(Components.error("This player is not in cell!"));
+            return;
+        }
+        target.teleport(targetLoc.toBlockLocation());
+        this.cellManager.removePlayer(uuid);
+        PrisonPlayerCommand.locationData.remove(uuid);
+
+        if (target.getPreviousGameMode() == null) {
+            target.setGameMode(GameMode.SURVIVAL);
+        } else {
+            target.setGameMode(target.getPreviousGameMode());
+        }
+        sender.sendMessage(Components.success("Successfully removed player from cell."));
+    }
+
+    @Execute(required = 0)
+    void executeGui(Player sender) {
+        this.guiManager.showUnPrisonGUI(sender);
+    }
 }

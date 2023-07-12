@@ -1,11 +1,14 @@
 package dev.byzus.byzuscells.command;
 
+import dev.byzus.byzuscells.component.Components;
+import dev.byzus.byzuscells.manager.GUIManager;
 import dev.byzus.byzuscells.manager.PlayerJailManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -13,9 +16,36 @@ import org.bukkit.entity.Player;
 @Permission("byzuscells.jail")
 public class JailPlayerCommand {
 
-    @Execute(required = 2)
-    void execute(CommandSender sender, @Arg @Name("target") Player target, @Arg @Name("radius") int borderSize) {
-        PlayerJailManager.jail(sender, target, borderSize);
+    private final GUIManager guiManager;
+    private final PlayerJailManager jailManager;
+
+    public JailPlayerCommand(GUIManager guiManager, PlayerJailManager jailManager) {
+        this.guiManager = guiManager;
+        this.jailManager = jailManager;
     }
 
+    @Execute(required = 2)
+    void execute(CommandSender sender, @Arg @Name("target") Player target, @Arg @Name("radius") int borderSize) {
+        if (target == null) {
+            sender.sendMessage(Components.error("Invalid player: ").append(Component.text(target.getName())));
+            return;
+        }
+
+        if (borderSize <= 0) {
+            sender.sendMessage(Components.error("Border size can't be 0 or less."));
+            return;
+        }
+
+        if (this.jailManager.getJails().containsValue(target.getUniqueId())) {
+            sender.sendMessage(Components.fatal("Player is already jailed!"));
+            return;
+        }
+        this.jailManager.jail(sender, target, borderSize);
+    }
+
+    @Execute(required = 0)
+    void jailGui(CommandSender sender) {
+        Player target = (Player) sender;
+        this.guiManager.showJailGUI(target);
+    }
 }

@@ -18,7 +18,19 @@ public class Components {
     }
 
     public static Component info(String text) {
-        return Component.text(text).color(TextColor.color(0, 200, 200));
+        return Component.text(text).color(TextColor.color(0, 170, 170));
+    }
+
+    public static Component warning(String text) {
+        return Component.text(text).color(TextColor.color(255, 170, 0));
+    }
+
+    public static Component fatal(String text) {
+        return Component.text(text).color(TextColor.color(210, 0, 0));
+    }
+
+    public static Component custom(String text, int r, int g, int b) {
+        return Component.text(text).color(TextColor.color(r, g, b));
     }
 
 }

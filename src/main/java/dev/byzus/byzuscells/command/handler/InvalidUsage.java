@@ -22,9 +22,9 @@ public class InvalidUsage implements InvalidUsageHandler<CommandSender> {
 
         for (String scheme : schematics) {
             Formatter formatter = new Formatter()
-                .register("&7› &3{USAGE}", scheme);
+                .register("{USAGE}", scheme);
 
-            sender.sendMessage(formatter.format("&7› &3{USAGE}"));
+            sender.sendMessage(Components.custom("» ", 70, 70, 70).append(Components.error(formatter.format("{USAGE}"))));
         }
 
     }

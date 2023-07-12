@@ -1,5 +1,6 @@
 package dev.byzus.byzuscells.command.handler;
 
+import dev.byzus.byzuscells.component.Components;
 import dev.rollczi.litecommands.command.LiteInvocation;
 import dev.rollczi.litecommands.command.permission.RequiredPermissions;
 import dev.rollczi.litecommands.handle.PermissionHandler;
@@ -17,7 +18,8 @@ public class PermissionMessage implements PermissionHandler<CommandSender> {
 
         Formatter formatter = new Formatter()
             .register("{PERMISSION}", value);
-        commandSender.sendMessage(formatter.format("You don't have permission to use this command: &7{PERMISSION}"));
+
+        commandSender.sendMessage(Components.error("You don't have permission to use this command: " + formatter.format("{PERMISSION}")));
     }
 
 }

@@ -1,16 +1,21 @@
 package dev.byzus.byzuscells;
 
 import com.google.common.base.Stopwatch;
+import dev.byzus.byzuscells.cell.Cell;
 import dev.byzus.byzuscells.command.CreateCellCommand;
 import dev.byzus.byzuscells.command.DeleteCellCommand;
 import dev.byzus.byzuscells.command.JailPlayerCommand;
+import dev.byzus.byzuscells.command.ListCellsCommand;
 import dev.byzus.byzuscells.command.PrisonPlayerCommand;
 import dev.byzus.byzuscells.command.UnJailPlayerCommand;
 import dev.byzus.byzuscells.command.UnPrisonPlayerCommand;
+import dev.byzus.byzuscells.command.argument.CellArgument;
 import dev.byzus.byzuscells.command.argument.PlayerArgument;
 import dev.byzus.byzuscells.command.handler.InvalidUsage;
 import dev.byzus.byzuscells.command.handler.PermissionMessage;
-import dev.byzus.byzuscells.translation.LanguageManager;
+import dev.byzus.byzuscells.manager.CellManager;
+import dev.byzus.byzuscells.manager.GUIManager;
+import dev.byzus.byzuscells.manager.PlayerJailManager;
 import dev.rollczi.litecommands.LiteCommands;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.tools.BukkitOnlyPlayerContextual;
@@ -26,35 +31,41 @@ public final class ByzusCells extends JavaPlugin {
 
     private LiteCommands<CommandSender> liteCommands;
 
-
     @Override
     public void onEnable() {
         Stopwatch started = Stopwatch.createStarted();
         instance = this;
-        this.getConfig().options().copyDefaults();
-        this.saveDefaultConfig();
+
+        CellManager cellManager = new CellManager();
+        PlayerJailManager jailManager = new PlayerJailManager();
+        GUIManager guiManager = new GUIManager(jailManager, cellManager, this.getServer());
 
         this.liteCommands = LiteBukkitFactory.builder(this.getServer(), "byzuscells")
             .argument(Player.class, new PlayerArgument(this.getServer()))
+            .argument(Cell.class, new CellArgument(cellManager))
             .contextualBind(Player.class, new BukkitOnlyPlayerContextual<>("You must be a player to use this command."))
-            .commandInstance(new CreateCellCommand(),
-                new PrisonPlayerCommand(),
-                new DeleteCellCommand(),
-                new JailPlayerCommand(),
-                new UnPrisonPlayerCommand(),
-                new UnJailPlayerCommand())
+            .commandInstance(
+                new CreateCellCommand(cellManager),
+                new DeleteCellCommand(cellManager),
+                new JailPlayerCommand(guiManager, jailManager),
+                new ListCellsCommand(this.getServer(), cellManager),
+                new PrisonPlayerCommand(cellManager),
+                new UnPrisonPlayerCommand(cellManager, guiManager),
+                new UnJailPlayerCommand(jailManager, guiManager))
             .invalidUsageHandler(new InvalidUsage())
             .permissionHandler(new PermissionMessage())
             .register();
 
-        LanguageManager.checkLanguage();
-        long millis = started.elapsed(TimeUnit.MILLISECONDS);
+        long millis = started.stop().elapsed(TimeUnit.MILLISECONDS);
         this.getLogger().info("Successfully enabled ByzusCells in " + millis + "ms");
     }
 
     @Override
     public void onDisable() {
-
+        if (this.liteCommands.getPlatform() != null) {
+            this.liteCommands.getPlatform().unregisterAll();
+        }
+        instance = null;
     }
 
     public static ByzusCells getInstance() {

@@ -2,21 +2,6 @@ package dev.byzus.byzuscells.cell;
 
 import org.bukkit.Location;
 
-public class Cell {
+public record Cell(Location location, int id) {
 
-    private final Location location;
-    private final int id;
-
-    public Cell(Location location, int id) {
-        this.location = location;
-        this.id = id;
-    }
-
-    public Location getLocation() {
-        return this.location;
-    }
-
-    public int getId() {
-        return this.id;
-    }
 }

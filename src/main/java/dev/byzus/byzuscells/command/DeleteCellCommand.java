@@ -1,6 +1,7 @@
 package dev.byzus.byzuscells.command;
 
-import dev.byzus.byzuscells.cell.CellManager;
+import dev.byzus.byzuscells.component.Components;
+import dev.byzus.byzuscells.manager.CellManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
@@ -12,8 +13,19 @@ import org.bukkit.command.CommandSender;
 @Permission("byzuscells.deletecell")
 public class DeleteCellCommand {
 
+    private final CellManager cellManager;
+
+    public DeleteCellCommand(CellManager cellManager) {
+        this.cellManager = cellManager;
+    }
+
     @Execute(required = 1)
     void executeSelf(CommandSender sender, @Arg @Name("id") int cellId) {
-        CellManager.deleteCell(sender, cellId);
+        if (this.cellManager.findCell(cellId) == null) {
+            sender.sendMessage(Components.error("This cell doesn't exist!"));
+            return;
+        }
+        this.cellManager.deleteCell(cellId);
+        sender.sendMessage(Components.success("Successfully deleted cell of ID: ").append(Components.success(String.valueOf(cellId))));
     }
 }

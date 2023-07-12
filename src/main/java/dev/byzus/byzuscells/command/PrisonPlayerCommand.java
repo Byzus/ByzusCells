@@ -1,40 +1,56 @@
 package dev.byzus.byzuscells.command;
 
-import dev.byzus.byzuscells.cell.CellManager;
-import dev.byzus.byzuscells.translation.LanguageManager;
+import dev.byzus.byzuscells.component.Components;
+import dev.byzus.byzuscells.manager.CellManager;
 import dev.rollczi.litecommands.argument.Arg;
 import dev.rollczi.litecommands.argument.Name;
 import dev.rollczi.litecommands.command.execute.Execute;
 import dev.rollczi.litecommands.command.permission.Permission;
 import dev.rollczi.litecommands.command.route.Route;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import panda.std.Blank;
+import panda.std.Result;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-@Route(name = "prison", aliases = "addplayer")
+@Route(name = "prison")
 @Permission("byzuscells.prison")
 public class PrisonPlayerCommand {
 
-    public static Location playerPreviousLocation;
+    public static final Map<UUID, Location> locationData = new HashMap<>();
 
-    @Execute(required = 2)
-    void execute(CommandSender sender, @Arg @Name("target") String target, @Arg @Name("id") int cellId) {
-        Player player = Bukkit.getPlayer(target);
-        if (player == null) {
-            sender.sendMessage(LanguageManager.CANNOT_FIND_PLAYER.replaceText(consumer -> {
-                consumer.match("{target}").replacement(target).build();
-            }));
-            return;
-        }
-        playerPreviousLocation = player.getLocation();
-        UUID uuid = player.getUniqueId();
-        CellManager.addPlayer(cellId, sender, uuid);
-        player.setGameMode(GameMode.ADVENTURE);
-        sender.sendMessage(LanguageManager.PLAYER_ADDED_TO_CELL);
+    private final CellManager cellManager;
+
+    public PrisonPlayerCommand(CellManager cellManager) {
+        this.cellManager = cellManager;
     }
 
+    @Execute(required = 2)
+    void execute(CommandSender sender, @Arg @Name("target") Player target, @Arg @Name("id") int cellId) {
+        if (target == null) {
+            sender.sendMessage(Components.error("Cannot find player with that name."));
+            return;
+        }
+
+        UUID uuid = target.getUniqueId();
+        locationData.putIfAbsent(uuid, target.getLocation());
+
+        Result<Blank, Exception> result = this.cellManager.addPlayer(cellId, uuid);
+
+        if (result.isOk()) {
+            if (locationData.containsKey(uuid)) {
+                sender.sendMessage(Components.info("This player is already in cell, however it's been teleported again."));
+                return;
+            }
+            target.setGameMode(GameMode.ADVENTURE);
+            sender.sendMessage(Components.success("Successfully added player to cell!"));
+        } else {
+            sender.sendMessage(Components.error("Cannot add player to that cell!"));
+        }
+    }
 }
